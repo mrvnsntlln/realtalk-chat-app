@@ -1,35 +1,51 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react';
+import { Router, Route } from 'react-router-dom';
+import { createMuiTheme } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider } from '@material-ui/styles';
+import { SnackbarProvider } from 'notistack';
 
-function App() {
-  const [count, setCount] = useState(0)
+import history from './Utilities/history';
+import PrivateRoute from './Utilities/private-route';
+import Home from './Home/Home';
+import Chat from './Chat/Chat';
+import Register from './Home/Register';
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+const theme = createMuiTheme({
+    palette: {
+        primary: {
+            light: '#58a5f0',
+            main: '#0277bd',
+            dark: '#004c8c',
+        },
+        secondary: {
+            light: '#ffd95a',
+            main: '#f9a825',
+            dark: '#c17900',
+            contrastText: '#212121',
+        },
+        background: {
+            default: '#f0f0f0',
+        },
+    },
+    typography: {
+        useNextVariants: true,
+    },
+});
+
+const App = () => {
+    return (
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <SnackbarProvider maxSnack={3} autoHideDuration={3000}>
+                <Router history={history}>
+                    <Route path="/" exact component={Home} />
+                    <Route path="/register" exact component={Register} />
+                    <PrivateRoute path="/chat" component={Chat} />
+                </Router>
+            </SnackbarProvider>
+        </ThemeProvider>
+    );
 }
 
-export default App
+export default App;
